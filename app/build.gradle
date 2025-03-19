@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.5'  // Spring Boot 3.3.5 최신 안정 버전
+    id 'io.spring.dependency-management' version '1.1.6'  // 3.3.5와 호환되는 최신 버전
+}
+
+group = 'com.money'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Boot Starter
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    // Swagger (SpringDoc OpenAPI) 최신 버전
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+
+    // MySQL JDBC 드라이버 추가
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // 개발 환경용 (DevTools)
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // 테스트 환경
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly 'com.h2database:h2'
+
+    // JSON Web Token (JWT)
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+    // env읽기
+    implementation 'io.github.cdimascio:java-dotenv:5.2.2'
+
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
