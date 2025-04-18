@@ -1,0 +1,50 @@
+package com.money.app.user.dto;
+import com.money.app.user.domain.User;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class UserDto { //내부 로직에 사용
+    private String id;
+    private String name;
+    private String nickname;
+    private String content;
+    private String cellphone;
+    private String email;
+    private String planet;
+    private String password;
+    private int totalIncome;
+    private int totalExpense;
+    private LocalDate birth;
+    private String gender;
+    private String job;
+    private LocalDateTime createDatetime;
+    private LocalDateTime updateDatetime;
+    private int target;
+    private String prefer;
+
+    public static UserDto fromEntity(User user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .cellphone(user.getCellphone())
+                .email(user.getEmail())
+                .planet(user.getPlanet())
+                .totalIncome(user.getTotalIncome())
+                .totalExpense(user.getTotalExpense())
+                .birth(user.getBirth())
+                .gender(user.getGender())
+                .job(user.getJob())
+                .createDatetime(user.getCreateDatetime())
+                .updateDatetime(user.getUpdateDatetime())
+                .target(user.getTarget())
+                .build();
+    }
+
+}
