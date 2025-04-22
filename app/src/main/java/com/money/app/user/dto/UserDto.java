@@ -1,4 +1,5 @@
 package com.money.app.user.dto;
+import com.money.app.user.domain.Planet;
 import com.money.app.user.domain.User;
 import lombok.*;
 
@@ -17,7 +18,7 @@ public class UserDto { //내부 로직에 사용
     private String content;
     private String cellphone;
     private String email;
-    private String planet;
+    private Planet planet;
     private String password;
     private int totalIncome;
     private int totalExpense;

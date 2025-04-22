@@ -4,6 +4,9 @@ import com.money.app.user.domain.User;
 import com.money.app.user.dto.UserCreateDto;
 import com.money.app.user.dto.UserDto;
 import com.money.app.user.dto.UserResponseDto;
+import com.money.app.user.dto.UserUpdateDto;
+import com.money.app.user.exception.DuplicateFieldException;
+import com.money.app.user.exception.UserNotFoundexception;
 import com.money.app.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,66 +22,74 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    public void checkDuplicationCreate(String field, String value) {
+        boolean isDuplicate=false;
+
+        switch(field) {
+            case "email":
+                isDuplicate=userRepository.existsByEmail(value);
+                break;
+            case "id":
+                isDuplicate=userRepository.existsById(value);
+                break;
+            case "cellphone":
+                isDuplicate=userRepository.existsByCellphone(value);
+                break;
+            default:
+                throw new IllegalArgumentException("알 수 없는 필드");
+        }
+        if(isDuplicate)
+            throw new DuplicateFieldException(field, value+" 은 이미 사용중 입니다.");
+    }
     public UserResponseDto getUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UserNotFoundexception("사용자를 찾을 수 없습니다."));
         return UserResponseDto.fromEntity(user);
     }
 
     public UserResponseDto getUserById(String id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UserNotFoundexception("사용자를 찾을 수 없습니다."));
         return UserResponseDto.fromEntity(user);
     }
 
-    public String createUser(UserCreateDto userCreateDto) {
-        userRepository.findByEmail(userCreateDto.getEmail()).ifPresent(user->{
-            throw new RuntimeException("중복된 이메일입니다.");
-        });
-        userRepository.findByCellphone(userCreateDto.getCellphone()).ifPresent(user-> {
-            throw new RuntimeException("중복된 핸드폰번호입니다.");
-        });
+    public void createUser(UserCreateDto userCreateDto) {
+        checkDuplicationCreate("id",userCreateDto.getId());
+        checkDuplicationCreate("email", userCreateDto.getEmail());
+        checkDuplicationCreate("cellphone",userCreateDto.getCellphone());
         User user=User.builder()
                 .id(userCreateDto.getId())
                 .name(userCreateDto.getName())
                 .cellphone(userCreateDto.getCellphone())
                 .email(userCreateDto.getEmail())
-                .planet()
-                .totalIncome(0)
-                .totalExpense(0)
                 .birth(userCreateDto.getBirth())
                 .gender(userCreateDto.getGender())
                 .job(userCreateDto.getJob())
-                .createDatetime(java.time.LocalDateTime.now())
-                .updateDatetime(java.time.LocalDateTime.now())
-                .target(0)
-                .prefer()
+                .prefer(null)
                 .build();
 
-        userRepository.save(user);
-
-        return ("회원가입이 완료되었습니다.");
+       userRepository.save(user);
     }
 
-    public UserDto updateUser(String id, UserDto userDto) {
+    public void updateUser(String id, UserUpdateDto userUpdateDto) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UserNotFoundexception("사용자를 찾을 수 없습니다."));
+        checkDuplicationCreate("email", userUpdateDto.getEmail());
+        checkDuplicationCreate("cellphone",userUpdateDto.getCellphone());
+        user.setName(userUpdateDto.getName());
+        user.setCellphone(userUpdateDto.getCellphone());
+        user.setEmail(userUpdateDto.getEmail());
+        user.setBirth(userUpdateDto.getBirth());
+        user.setGender(userUpdateDto.getGender());
+        user.setJob(userUpdateDto.getJob());
+        user.setPrefer(userUpdateDto.getPrefer());
 
-        user.setCellphone(userDto.getCellphone());
-        user.setEmail(userDto.getEmail());
-        user.setBirth(userDto.getBirth());
-        user.setGender(userDto.getGender());
-        user.setJob(userDto.getJob());
-        user.setUpdateDatetime(LocalDateTime.now());
-
-        User updated=userRepository.save(user);
-
-        return UserDto.fromEntity(updated);
+        userRepository.save(user);
     }
 
     public void deleteUser(String id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UserNotFoundexception("사용자를 찾을 수 없습니다."));
         userRepository.delete(user);
     }
 }

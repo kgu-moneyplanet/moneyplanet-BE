@@ -1,8 +1,9 @@
 package com.money.app.user.domain;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.cglib.core.Local;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -15,24 +16,24 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @Column(length = 26)
+    @Column(length = 26, nullable = false)
     private String id;
 
-    @Column(length = 26)
+    @Column(length = 26, nullable = false)
     private String name;
 
     @Column(length = 26)
     private String cellphone;
 
-    @Column(length = 26, unique = true)
+    @Column(length = 26, unique = true, nullable = false)
     private String email;
 
-    @Column(length = 26)
+    @Column(length = 100, nullable = false) //비밀번호 해시화 후 저장
     private String password;
 
-    @Nullable
-    @Column(length = 26)
-    private String planet; //회원가입 전 NULL 혹은 DEFAULT
+    @Column(length = 26, nullable = true)
+    @Enumerated(EnumType.STRING)
+    private Planet planet; //회원가입 전 NULL 혹은 DEFAULT
 
     private int totalIncome;
 
@@ -51,6 +52,21 @@ public class User {
 
     private int target;
 
-    @Column(length = 255) //추후 수정
+    @Column(length = 255, nullable = true) //추후 수정
     private String prefer;
+
+    @PrePersist
+    public void onCreate() {
+        this.createDatetime=LocalDateTime.now();
+        this.updateDatetime=LocalDateTime.now();
+        this.target=0;
+        this.planet=null;
+        this.totalIncome=0;
+        this.totalExpense=0;
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        this.updateDatetime= LocalDateTime.now();
+    }
 }

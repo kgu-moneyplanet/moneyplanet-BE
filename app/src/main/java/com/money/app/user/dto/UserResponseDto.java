@@ -1,10 +1,10 @@
 package com.money.app.user.dto;
 
+import com.money.app.user.domain.Planet;
 import com.money.app.user.domain.User;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,14 +18,12 @@ public class UserResponseDto { //외부 응답용(프론트용), Server->Client,
     private String content;
     private String cellphone;
     private String email;
-    private String planet;
+    private Planet planet;
     private int totalIncome;
     private int totalExpense;
     private LocalDate birth;
     private String gender;
     private String job;
-    private LocalDateTime createDatetime;
-    private LocalDateTime updateDatetime;
     private int target;
     private String prefer;
 
@@ -41,8 +39,6 @@ public class UserResponseDto { //외부 응답용(프론트용), Server->Client,
                 .birth(user.getBirth())
                 .gender(user.getGender())
                 .job(user.getJob())
-                .createDatetime(user.getCreateDatetime())
-                .updateDatetime(user.getUpdateDatetime())
                 .target(user.getTarget())
                 .build();
     }
