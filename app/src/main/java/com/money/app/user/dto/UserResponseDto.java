@@ -14,8 +14,6 @@ import java.time.LocalDate;
 public class UserResponseDto { //외부 응답용(프론트용), Server->Client, 민감한 정보 제외
     private String id;
     private String name;
-    private String nickname;
-    private String content;
     private String cellphone;
     private String email;
     private Planet planet;

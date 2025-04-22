@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 public class UserDto { //내부 로직에 사용
     private String id;
     private String name;
-    private String nickname;
-    private String content;
     private String cellphone;
     private String email;
     private Planet planet;
