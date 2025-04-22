@@ -14,6 +14,7 @@ public class UserCreateDto { //유저 생성용, Client->Server
     private String name;
     private String cellphone;
     private String email;
+    private String password;
     private LocalDate birth;
     private String gender;
     private String job;

@@ -62,6 +62,7 @@ public class UserService {
                 .name(userCreateDto.getName())
                 .cellphone(userCreateDto.getCellphone())
                 .email(userCreateDto.getEmail())
+                .password(userCreateDto.getPassword())
                 .birth(userCreateDto.getBirth())
                 .gender(userCreateDto.getGender())
                 .job(userCreateDto.getJob())
