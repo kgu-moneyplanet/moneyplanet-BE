@@ -1,4 +1,4 @@
-package com.money.app.util;
+package com.money.app.util.ulid;
 
 import de.huxhorn.sulky.ulid.ULID;
 

@@ -57,6 +57,7 @@ public class User {
     private LocalDateTime updateDatetime;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Tx> txList = new ArrayList<>(); // List 초기화
 }
 

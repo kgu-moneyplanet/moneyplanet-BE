@@ -25,7 +25,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 숫자 증가
     private Long id;
 
-    @Column(length = 26, nullable = false)
+    @Column(length = 26, nullable = false, unique = true)
     private String name;
 
     private LocalDateTime createDatetime;
@@ -33,8 +33,12 @@ public class Category {
     private LocalDateTime updateDatetime;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Tx> txList = new ArrayList<>(); // List 초기화
 
+    public void update(String name) {
+        this.name = name;
+    }
 
     @PrePersist  //Insert 직전 db(JPA)에서 아래의 값을 수정
     public void onCreate() {

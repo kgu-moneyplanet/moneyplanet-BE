@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import com.money.app.category.domain.Category;
 import com.money.app.user.domain.User;
 import com.money.app.tx.dto.TxCreateDto;
-import com.money.app.util.UlidUtil;
+import com.money.app.util.ulid.UlidUtil;
 
 @Getter        // getName 등 get 메소드 자동생성
 @NoArgsConstructor(access = AccessLevel.PROTECTED)   // 파라미터 없는 기본 생성자 생성(JPA용)
