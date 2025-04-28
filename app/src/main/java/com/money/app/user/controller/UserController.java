@@ -43,7 +43,7 @@ public class UserController {
         return ApiResponseUtil.success(HttpStatus.OK,"회원 탈퇴 성공");
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/get/{ulid}")
     public ResponseEntity<ApiResponse<UserResponseDto>> getUserByUlid(@PathVariable String ulid) {
         UserResponseDto user=userService.getUserByUlid(ulid);
         return ApiResponseUtil.success(HttpStatus.OK,"회원 조회 성공", user);
