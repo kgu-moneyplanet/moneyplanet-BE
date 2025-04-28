@@ -4,10 +4,12 @@ import com.money.app.user.domain.User;
 import com.money.app.user.dto.UserCreateDto;
 import com.money.app.user.dto.UserResponseDto;
 import com.money.app.user.dto.UserUpdateDto;
-import com.money.app.user.exception.DuplicateFieldException;
-import com.money.app.user.exception.UserNotFoundexception;
+import com.money.app.util.exception.*;
 import com.money.app.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
@@ -19,61 +21,34 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void checkDuplicationCreate(String field, String value) {
-        boolean isDuplicate=false;
-
-        switch(field) {
-            case "email":
-                isDuplicate=userRepository.existsByEmail(value);
-                break;
-            case "id":
-                isDuplicate=userRepository.existsById(value);
-                break;
-            case "cellphone":
-                isDuplicate=userRepository.existsByCellphone(value);
-                break;
-            default:
-                throw new IllegalArgumentException("알 수 없는 필드");
-        }
-        if(isDuplicate)
-            throw new DuplicateFieldException(field, value+" 은 이미 사용중 입니다.");
-    }
-    public UserResponseDto getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundexception("사용자를 찾을 수 없습니다."));
-        return UserResponseDto.fromEntity(user);
-    }
-
-    public UserResponseDto getUserById(String id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundexception("사용자를 찾을 수 없습니다."));
-        return UserResponseDto.fromEntity(user);
-    }
-
     public void createUser(UserCreateDto userCreateDto) {
-        checkDuplicationCreate("id",userCreateDto.getId());
-        checkDuplicationCreate("email", userCreateDto.getEmail());
-        checkDuplicationCreate("cellphone",userCreateDto.getCellphone());
-        User user=User.builder()
-                .id(userCreateDto.getId())
-                .name(userCreateDto.getName())
-                .cellphone(userCreateDto.getCellphone())
-                .email(userCreateDto.getEmail())
-                .password(userCreateDto.getPassword())
-                .birth(userCreateDto.getBirth())
-                .gender(userCreateDto.getGender())
-                .job(userCreateDto.getJob())
-                .prefer(null)
-                .build();
+        //id, cellphone, email 중복 검사
+        if (userRepository.existsById(userCreateDto.getId())) {
+            throw new CustomException(ErrorCode.USER_ID_ALREADY_EXISTS);
+        }
+        if (userRepository.existsByCellphone(userCreateDto.getCellphone())) {
+            throw new CustomException(ErrorCode.USER_CELLPHONE_ALREADY_EXISTS);
+        }
+        if (userRepository.existsByEmail(userCreateDto.getEmail())) {
+            throw new CustomException(ErrorCode.USER_EMAIL_ALREADY_EXISTS);
+        }
+        //저장 Dto->Entity
+        User user = User.create(userCreateDto);
 
-       userRepository.save(user);
+        userRepository.save(user);
     }
 
     public void updateUser(String id, UserUpdateDto userUpdateDto) {
+        //id 조회, cellphone, email 중복 검사
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundexception("사용자를 찾을 수 없습니다."));
-        checkDuplicationCreate("email", userUpdateDto.getEmail());
-        checkDuplicationCreate("cellphone",userUpdateDto.getCellphone());
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        if (userRepository.existsByCellphone(userUpdateDto.getCellphone())) {
+            throw new CustomException(ErrorCode.USER_CELLPHONE_ALREADY_EXISTS);
+        }
+        if (userRepository.existsByEmail(userUpdateDto.getEmail())) {
+            throw new CustomException(ErrorCode.USER_EMAIL_ALREADY_EXISTS);
+        }
+
         user.setName(userUpdateDto.getName());
         user.setCellphone(userUpdateDto.getCellphone());
         user.setEmail(userUpdateDto.getEmail());
@@ -87,7 +62,14 @@ public class UserService {
 
     public void deleteUser(String id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundexception("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponseDto getUserById(String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return UserResponseDto.fromEntity(user);
     }
 }

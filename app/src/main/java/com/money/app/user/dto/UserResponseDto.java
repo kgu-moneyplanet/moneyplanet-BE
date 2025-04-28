@@ -25,6 +25,7 @@ public class UserResponseDto { //외부 응답용(프론트용), Server->Client,
     private int target;
     private String prefer;
 
+
     public static UserResponseDto fromEntity(User user) {
         return UserResponseDto.builder()
                 .id(user.getId())

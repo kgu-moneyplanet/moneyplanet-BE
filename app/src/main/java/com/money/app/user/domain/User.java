@@ -1,5 +1,6 @@
 package com.money.app.user.domain;
 
+import com.money.app.user.dto.UserCreateDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.cglib.core.Local;
@@ -10,9 +11,10 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED) //JPA용
+@AllArgsConstructor(access = AccessLevel.PRIVATE) //Buider용
 @Builder
+@Table(name="User")
 public class User {
 
     @Id
@@ -69,4 +71,19 @@ public class User {
     public void onUpdate() {
         this.updateDatetime= LocalDateTime.now();
     }
+
+    public static User create(UserCreateDto dto){
+        return User.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .cellphone(dto.getCellphone())
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .birth(dto.getBirth())
+                .gender(dto.getGender())
+                .job(dto.getJob())
+                .prefer(null)
+                .build();
+    }
+
 }
