@@ -6,6 +6,8 @@ import com.money.app.user.dto.UserResponseDto;
 import com.money.app.user.dto.UserUpdateDto;
 import com.money.app.util.exception.*;
 import com.money.app.user.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,9 +18,10 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-
+    private final PasswordEncoder passwordEncoder;
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public void createUser(UserCreateDto userCreateDto) {
@@ -32,8 +35,13 @@ public class UserService {
         if (userRepository.existsByEmail(userCreateDto.getEmail())) {
             throw new CustomException(ErrorCode.USER_EMAIL_ALREADY_EXISTS);
         }
+
+        // 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(userCreateDto.getPassword());
+
         //저장 Dto->Entity
         User user = User.create(userCreateDto);
+        user.setPassword(encodedPassword); // 암호화된 비밀번호 저장
 
         userRepository.save(user);
     }
