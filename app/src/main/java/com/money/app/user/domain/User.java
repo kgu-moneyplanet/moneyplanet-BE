@@ -1,10 +1,9 @@
 package com.money.app.user.domain;
 
 import com.money.app.user.dto.UserCreateDto;
+import com.money.app.util.ulid.UlidUtil;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.cglib.core.Local;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -18,7 +17,10 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @Column(length = 26, nullable = false)
+    @Column
+    private String ulid;
+
+    @Column(length = 26, nullable = false, unique = true)
     private String id;
 
     @Column(length = 26, nullable = false)
@@ -59,6 +61,7 @@ public class User {
 
     @PrePersist
     public void onCreate() {
+        if(ulid==null) this.ulid= UlidUtil.generate();
         this.createDatetime=LocalDateTime.now();
         this.updateDatetime=LocalDateTime.now();
         this.target=0;

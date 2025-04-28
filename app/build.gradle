@@ -54,7 +54,8 @@ dependencies {
 	// env읽기
 	implementation 'io.github.cdimascio:java-dotenv:5.2.2'
 
-
+	// ULID 생성용
+	implementation 'de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.2.0'
 }
 
 tasks.named('test') {

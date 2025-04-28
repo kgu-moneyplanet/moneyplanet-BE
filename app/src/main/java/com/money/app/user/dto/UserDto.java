@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class UserDto { //내부 로직에 사용
+    private String ulid; 
     private String id;
     private String name;
     private String cellphone;
@@ -30,6 +31,7 @@ public class UserDto { //내부 로직에 사용
 
     public static UserDto fromEntity(User user) {
         return UserDto.builder()
+                .ulid(user.getUlid())
                 .id(user.getId())
                 .name(user.getName())
                 .cellphone(user.getCellphone())
