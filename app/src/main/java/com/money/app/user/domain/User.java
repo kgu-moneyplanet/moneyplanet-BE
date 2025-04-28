@@ -5,9 +5,12 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import java.util.List;
+import java.util.ArrayList;
+import com.money.app.tx.domain.Tx;
+
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -52,5 +55,9 @@ public class User {
     private LocalDateTime createDatetime;
 
     private LocalDateTime updateDatetime;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Tx> txList = new ArrayList<>(); // List 초기화
 }
 
