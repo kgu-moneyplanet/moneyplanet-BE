@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class UserResponseDto { //외부 응답용(프론트용), Server->Client, 민감한 정보 제외
-    private String id;
+    private String username;
     private String name;
     private String cellphone;
     private String email;
@@ -28,7 +28,7 @@ public class UserResponseDto { //외부 응답용(프론트용), Server->Client,
 
     public static UserResponseDto fromEntity(User user) {
         return UserResponseDto.builder()
-                .id(user.getId())
+                .username(user.getUsername())
                 .name(user.getName())
                 .cellphone(user.getCellphone())
                 .email(user.getEmail())

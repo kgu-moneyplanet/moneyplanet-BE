@@ -29,29 +29,29 @@ public class UserController {
         return ApiResponseUtil.success(HttpStatus.CREATED, "회원 가입 성공");
     }
 
-    @PatchMapping("/update/{ulid}")
+    @PatchMapping("/update/{id}")
     public ResponseEntity<ApiResponse<Void>> updateUser(
-            @PathVariable String ulid,
+            @PathVariable String id,
             @RequestBody UserUpdateDto userUpdateDto) {
-        userService.updateUser(ulid,userUpdateDto);
+        userService.updateUser(id,userUpdateDto);
         return ApiResponseUtil.success(HttpStatus.OK, "회원 정보 수정 성공");
     }
 
-    @DeleteMapping("/delete/{ulid}")
-    public ResponseEntity<ApiResponse<Void>> deletedUser(@PathVariable String ulid) {
-        userService.deleteUser(ulid);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ApiResponse<Void>> deletedUser(@PathVariable String id) {
+        userService.deleteUser(id);
         return ApiResponseUtil.success(HttpStatus.OK,"회원 탈퇴 성공");
-    }
-
-    @GetMapping("/get/{ulid}")
-    public ResponseEntity<ApiResponse<UserResponseDto>> getUserByUlid(@PathVariable String ulid) {
-        UserResponseDto user=userService.getUserByUlid(ulid);
-        return ApiResponseUtil.success(HttpStatus.OK,"회원 조회 성공", user);
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<ApiResponse<UserResponseDto>> getUserById(@PathVariable String id) {
         UserResponseDto user=userService.getUserById(id);
+        return ApiResponseUtil.success(HttpStatus.OK,"회원 조회 성공", user);
+    }
+
+    @GetMapping("/get/{username}")
+    public ResponseEntity<ApiResponse<UserResponseDto>> getUserByUsername(@PathVariable String username) {
+        UserResponseDto user=userService.getUserByUsername(username);
         return ApiResponseUtil.success(HttpStatus.OK,"회원 조회 성공", user);
     }
 

@@ -18,10 +18,10 @@ public class User {
 
     @Id
     @Column
-    private String ulid;
+    private String id; //PK, idex 조회용(ulid)
 
     @Column(length = 26, nullable = false, unique = true)
-    private String id;
+    private String username; //회원가입 시 유저에게 입력받는 id
 
     @Column(length = 26, nullable = false)
     private String name;
@@ -61,7 +61,7 @@ public class User {
 
     @PrePersist
     public void onCreate() {
-        if(ulid==null) this.ulid= UlidUtil.generate();
+        if(id==null) this.id= UlidUtil.generate();
         this.createDatetime=LocalDateTime.now();
         this.updateDatetime=LocalDateTime.now();
         this.target=0;
@@ -77,7 +77,7 @@ public class User {
 
     public static User create(UserCreateDto dto){
         return User.builder()
-                .id(dto.getId())
+                .username(dto.getUsername())
                 .name(dto.getName())
                 .cellphone(dto.getCellphone())
                 .email(dto.getEmail())

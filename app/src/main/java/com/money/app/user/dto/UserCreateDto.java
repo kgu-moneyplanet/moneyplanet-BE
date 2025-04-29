@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class UserCreateDto { //유저 생성용, Client->Server
-    private String id;
+    private String username;
     private String name;
     private String cellphone;
     private String email;

@@ -25,8 +25,8 @@ public class UserService {
     }
 
     public void createUser(UserCreateDto userCreateDto) {
-        //id, cellphone, email 중복 검사
-        if (userRepository.existsById(userCreateDto.getId())) {
+        //username(id), cellphone, email 중복 검사
+        if (userRepository.existsByUsername(userCreateDto.getUsername())) {
             throw new CustomException(ErrorCode.USER_ID_ALREADY_EXISTS);
         }
         if (userRepository.existsByCellphone(userCreateDto.getCellphone())) {
@@ -46,9 +46,9 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void updateUser(String ulid, UserUpdateDto userUpdateDto) {
-        //id 조회, cellphone, email 중복 검사
-        User user = userRepository.findByUlid(ulid)
+    public void updateUser(String id, UserUpdateDto userUpdateDto) {
+        //id(PK) 조회, cellphone, email 중복 검사
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         if (userRepository.existsByCellphone(userUpdateDto.getCellphone())) {
             throw new CustomException(ErrorCode.USER_CELLPHONE_ALREADY_EXISTS);
@@ -68,22 +68,22 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(String ulid) {
-        User user = userRepository.findByUlid(ulid)
+    public void deleteUser(String id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
     }
 
     @Transactional(readOnly = true)
-    public UserResponseDto getUserByUlid(String ulid) {
-        User user = userRepository.findByUlid(ulid)
+    public UserResponseDto getUserById(String id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return UserResponseDto.fromEntity(user);
     }
 
     @Transactional(readOnly = true)
-    public UserResponseDto getUserById(String id) {
-        User user = userRepository.findById(id)
+    public UserResponseDto getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return UserResponseDto.fromEntity(user);
     }
