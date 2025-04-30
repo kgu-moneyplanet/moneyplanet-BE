@@ -14,6 +14,7 @@ public class AppApplication {
         System.setProperty("SECURE_USERNAME", dotenv.get("SECURE_USERNAME"));
         System.setProperty("SECURE_PASSWORD", dotenv.get("SECURE_PASSWORD"));
         System.setProperty("SECURE_ROLE", dotenv.get("SECURE_ROLE"));
+        System.setProperty("JWT_SECRET", dotenv.get("JWT_SECRET"));
         SpringApplication.run(AppApplication.class, args);
 
     }
