@@ -7,6 +7,10 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import java.util.List;
+import java.util.ArrayList;
+import com.money.app.tx.domain.Tx;
+
 @Entity
 @Getter
 @Setter
@@ -74,6 +78,9 @@ public class User {
     public void onUpdate() {
         this.updateDatetime= LocalDateTime.now();
     }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Tx> txList = new ArrayList<>(); // List 초기화
 
     public static User create(UserCreateDto dto){
         return User.builder()
