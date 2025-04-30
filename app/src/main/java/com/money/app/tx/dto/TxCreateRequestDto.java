@@ -11,8 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TxCreateDto {
-    private String userId;
+public class TxCreateRequestDto {
     private LocalDate txDate;
     private TxType type;
     private Long categoryId;
@@ -21,4 +20,6 @@ public class TxCreateDto {
     private MethodType method;
     private String content;
     private String memo;
+    private String reason;
+    private String feedback;
 }
