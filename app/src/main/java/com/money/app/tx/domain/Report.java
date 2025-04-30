@@ -1,4 +1,7 @@
 package com.money.app.tx.domain;
+import com.money.app.tx.dto.ReportCreateDto;
+import com.money.app.tx.dto.ReportUpdateDto;
+import com.money.app.util.ulid.UlidUtil;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -42,6 +45,25 @@ public class Report {
     @PreUpdate  //Update 직전 db(JPA)에서 아래의 값을 수정
     public void onUpdate() {
         this.updateDatetime = LocalDateTime.now();
+    }
+
+    public static Report create(Tx tx, ReportCreateDto dto){
+        return Report.builder()
+                .id(UlidUtil.generate())
+                .tx(tx)
+                .abc(dto.getAbc())
+                .reason(dto.getReason())
+                .feedback(dto.getFeedback())
+                .build();
+    }
+
+    public void updateAbc(AbcType abc){
+        this.abc = abc;
+    }
+
+    public void update(ReportUpdateDto dto){
+        this.reason = dto.getReason();
+        this.feedback = dto.getFeedback();
     }
 }
 

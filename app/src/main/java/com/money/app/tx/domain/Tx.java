@@ -1,5 +1,6 @@
 package com.money.app.tx.domain;
 
+import com.money.app.tx.dto.TxUpdateDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,9 +48,9 @@ public class Tx {
     private AbcType abc;
 
     @Column(nullable = false)
-    private int amount;
+    private Long amount;
 
-    @Column(length = 26)
+    @Column(length = 26, nullable = false)
     @Enumerated(EnumType.STRING)
     private MethodType method;  // 예: CARD, CASH 등
 
@@ -90,5 +91,15 @@ public class Tx {
                 .content(dto.getContent())
                 .memo(dto.getMemo())
                 .build();
+    }
+    public void update(Category category, TxUpdateDto dto){
+        this.txDate = dto.getTxDate();
+        this.type = dto.getType();
+        this.category = category;
+        this.abc = dto.getAbc();
+        this.amount = dto.getAmount();
+        this.method = dto.getMethod();
+        this.content = dto.getContent();
+        this.memo = dto.getMemo();
     }
 }

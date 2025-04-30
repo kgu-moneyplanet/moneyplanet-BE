@@ -19,10 +19,10 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
         return UserDto.fromEntity(user);
     }
-
-    public UserDto getUserById(String id) {
+    @Transactional(readOnly = true)
+    public User getUserEntityById(String id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
-        return UserDto.fromEntity(user);
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return user;
     }
 }

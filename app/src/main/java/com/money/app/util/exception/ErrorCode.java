@@ -18,10 +18,14 @@ public enum ErrorCode {
     USER_EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "이메일이 존재하지 않습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND,"사용자를 찾을 수 없습니다."),
     //Tx 관련
-
+    TX_NOT_FOUNT(HttpStatus.NOT_FOUND, "TX를 찾을 수 없습니다"),
+    REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "Report를 찾을 수 없습니다"),
     //Category 관련
     CATEGORY_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 카테고리입니다."),
-    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다.");
+    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."),
+
+    //전체
+    INVALID_FORMAT(HttpStatus.BAD_REQUEST, "올바른 요청형식이 아닙니다");
 
     private final HttpStatus status;
     private final String message;
