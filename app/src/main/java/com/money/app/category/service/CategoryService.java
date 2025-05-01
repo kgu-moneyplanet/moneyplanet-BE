@@ -2,7 +2,6 @@ package com.money.app.category.service;
 
 import java.util.List;
 import com.money.app.category.domain.Category;
-import com.money.app.category.dto.CategoryDeleteDto;
 import com.money.app.category.dto.CategoryResponseDto;
 import com.money.app.category.dto.CategoryUpdateDto;
 import com.money.app.category.repository.CategoryRepository;
@@ -59,16 +58,23 @@ public class CategoryService {
         List<Category> categories = categoryRepository.findAll();
         if (categories.isEmpty()){
             throw new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
-        };
+        }
         return categories.stream()
                 .map(category -> new CategoryResponseDto(category.getId(), category.getName()))
                 .toList();
     }
-    @Transactional(readOnly = true)
 
+    @Transactional(readOnly = true)
     public CategoryResponseDto getCategoryByName(String name) {
         Category category = categoryRepository.findByName(name)
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND)); // 값이 없으면 예외로 던짐
         return new CategoryResponseDto(category.getId(), category.getName());
+    }
+
+    @Transactional(readOnly = true)
+    public Category getCategoryEntityById(Long id){
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+        return category;
     }
 }
