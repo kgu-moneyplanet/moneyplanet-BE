@@ -4,7 +4,7 @@ import com.money.app.category.domain.Category;
 import com.money.app.category.service.CategoryService;
 import com.money.app.tx.domain.Report;
 import com.money.app.tx.domain.Tx;
-import com.money.app.tx.domain.TxType;
+import com.money.app.util.common.TxType;
 import com.money.app.tx.dto.*;
 import com.money.app.tx.repository.ReportRepository;
 import com.money.app.tx.repository.TxRepository;

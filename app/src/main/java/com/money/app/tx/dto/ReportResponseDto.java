@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
-import com.money.app.tx.domain.AbcType;
+import com.money.app.util.common.AbcType;
 
 @Getter
 @Setter

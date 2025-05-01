@@ -1,6 +1,9 @@
 package com.money.app.tx.domain;
 
 import com.money.app.tx.dto.TxUpdateDto;
+import com.money.app.util.common.AbcType;
+import com.money.app.util.common.MethodType;
+import com.money.app.util.common.TxType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

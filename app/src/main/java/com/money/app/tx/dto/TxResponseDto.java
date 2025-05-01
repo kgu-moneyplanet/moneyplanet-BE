@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
-import com.money.app.tx.domain.AbcType;
-import com.money.app.tx.domain.MethodType;
-import com.money.app.tx.domain.TxType;
+import com.money.app.util.common.AbcType;
+import com.money.app.util.common.MethodType;
+import com.money.app.util.common.TxType;
 import java.time.LocalDate;
 
 @Getter

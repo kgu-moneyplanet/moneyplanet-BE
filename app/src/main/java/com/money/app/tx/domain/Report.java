@@ -1,10 +1,11 @@
 package com.money.app.tx.domain;
 import com.money.app.tx.dto.ReportCreateDto;
 import com.money.app.tx.dto.ReportUpdateDto;
+import com.money.app.util.common.AbcType;
 import com.money.app.util.ulid.UlidUtil;
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 @Getter        // getName 등 get 메소드 자동생성
