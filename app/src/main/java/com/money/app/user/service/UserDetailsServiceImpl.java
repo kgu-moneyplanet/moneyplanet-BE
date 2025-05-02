@@ -15,9 +15,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) { //AuthenticationManager.authenticate() 내부에서 호출
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_EMAIL_NOT_FOUND));
+    public UserDetails loadUserByUsername(String id) { //AuthenticationManager.authenticate() 내부에서 호출
+        User user = userRepository.findByEmail(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_ID_NOT_FOUND));
 
         return org.springframework.security.core.userdetails.User //Spring Security용 UserDetails 객체 반환
                 .withUsername(user.getId())

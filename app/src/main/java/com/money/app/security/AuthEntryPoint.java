@@ -34,7 +34,7 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
         if (authException instanceof BadCredentialsException) {  //비번 틀릴경우
             errorCode = ErrorCode.PASSWORD_NOT_CORRECT;
         } else if (authException instanceof UsernameNotFoundException){ // 아이디가 없는 경우
-            errorCode = ErrorCode.USER_EMAIL_NOT_FOUND;
+            errorCode = ErrorCode.USER_ID_NOT_FOUND;
         } else if (authException instanceof AuthenticationCredentialsNotFoundException  //토큰이 없는 경우
                 || authException.getMessage().contains("Full authentication is required")) {
             errorCode = ErrorCode.TOKEN_NOT_FOUND;
