@@ -3,6 +3,7 @@ package com.money.app.security;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,8 @@ import java.util.Date;
 @Component//bean주입
 public class JwtService {
 
+    @Autowired
+    private BlacklistTokenRepository blacklistTokenRepository;
     private static final long EXPIRATION_TIME = 86400000;
     private static final String PREFIX = "Bearer ";
 
@@ -48,5 +51,9 @@ public class JwtService {
                     .getSubject();
         }
         return null;
+    }
+
+    public boolean isTokenBlacklisted(String token) {
+        return blacklistTokenRepository.existsByToken(token);  // 토큰이 블랙리스트에 있으면 true 반환
     }
 }
