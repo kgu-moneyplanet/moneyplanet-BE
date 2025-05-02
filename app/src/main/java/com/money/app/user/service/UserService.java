@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -22,6 +23,18 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = new BCryptPasswordEncoder();
+    }
+    //형식 검사 메소드(email, gender, cellphone)
+    private boolean isValidEmail(String email) {
+        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email != null && email.matches(regex);
+    }
+    private boolean isValidGender(String gender) {
+        return gender != null && (gender.equalsIgnoreCase("M") || gender.equalsIgnoreCase("F"));
+    }
+    private boolean isValidCellphone(String cellphone) {
+        String regex = "^01[016789]-?\\d{3,4}-?\\d{4}$";
+        return cellphone != null && cellphone.matches(regex);
     }
 
     public void createUser(UserCreateDto userCreateDto) {
@@ -35,13 +48,26 @@ public class UserService {
         if (userRepository.existsByEmail(userCreateDto.getEmail())) {
             throw new CustomException(ErrorCode.USER_EMAIL_ALREADY_EXISTS);
         }
+        //email, gender, cellphone 형식 검사
+        if (!isValidEmail(userCreateDto.getEmail())) {
+            throw new CustomException(ErrorCode.INVALID_EMAIL_FORMAT);
+        }
+        if(!isValidGender(userCreateDto.getGender())) {
+            throw new CustomException(ErrorCode.INVALID_GENDER_FORMAT);
+        }
+        if(!isValidCellphone(userCreateDto.getCellphone())) {
+            throw new CustomException(ErrorCode.INVALID_CELLPHONE_FORMAT);
+        }
+        //birth 유효성 검사(현재보다 미래 시점 생일 유효x)
+        if (userCreateDto.getBirth().isAfter(LocalDate.now())) {
+            throw new CustomException(ErrorCode.INVALID_BIRTH_FORMAT);
+        }
 
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(userCreateDto.getPassword());
 
         //저장 Dto->Entity
-        User user = User.create(userCreateDto);
-        user.setPassword(encodedPassword); // 암호화된 비밀번호 저장
+        User user = User.create(userCreateDto, encodedPassword); // 암호화된 비밀번호 저장
 
         userRepository.save(user);
     }
@@ -56,14 +82,24 @@ public class UserService {
         if (userRepository.existsByEmail(userUpdateDto.getEmail())) {
             throw new CustomException(ErrorCode.USER_EMAIL_ALREADY_EXISTS);
         }
+        
+        //email, gender, cellphone 형식 검사
+        if (!isValidEmail(userUpdateDto.getEmail())) {
+            throw new CustomException(ErrorCode.INVALID_EMAIL_FORMAT);
+        }
+        if(!isValidGender(userUpdateDto.getGender())) {
+            throw new CustomException(ErrorCode.INVALID_GENDER_FORMAT);
+        }
+        if(!isValidCellphone(userUpdateDto.getCellphone())) {
+            throw new CustomException(ErrorCode.INVALID_CELLPHONE_FORMAT);
+        }
+        //birth 유효성 검사(현재보다 미래 시점 생일 유효x)
+        if (userUpdateDto.getBirth().isAfter(LocalDate.now())) {
+            throw new CustomException(ErrorCode.INVALID_BIRTH_FORMAT);
+        }
 
-        user.setName(userUpdateDto.getName());
-        user.setCellphone(userUpdateDto.getCellphone());
-        user.setEmail(userUpdateDto.getEmail());
-        user.setBirth(userUpdateDto.getBirth());
-        user.setGender(userUpdateDto.getGender());
-        user.setJob(userUpdateDto.getJob());
-        user.setPrefer(userUpdateDto.getPrefer());
+        user.update(userUpdateDto.getName(), userUpdateDto.getCellphone(), userUpdateDto.getEmail(), userUpdateDto.getBirth(),
+                userUpdateDto.getGender(), userUpdateDto.getJob(), userUpdateDto.getPrefer());
 
         userRepository.save(user);
     }

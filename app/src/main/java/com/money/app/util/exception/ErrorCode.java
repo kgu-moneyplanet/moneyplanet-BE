@@ -17,6 +17,10 @@ public enum ErrorCode {
     USER_CELLPHONE_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 전화번호 입니다."),
     USER_EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "이메일이 존재하지 않습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND,"사용자를 찾을 수 없습니다."),
+    INVALID_EMAIL_FORMAT(HttpStatus.UNPROCESSABLE_ENTITY, "이메일 형식이 올바르지 않습니다."),
+    INVALID_BIRTH_FORMAT(HttpStatus.UNPROCESSABLE_ENTITY, "생년월일이 올바르지 않습니다."),
+    INVALID_GENDER_FORMAT(HttpStatus.UNPROCESSABLE_ENTITY, "성별 형식이 올바르지 않습니다."),
+    INVALID_CELLPHONE_FORMAT(HttpStatus.UNPROCESSABLE_ENTITY, "전화번호 형식이 올바르지 않습니다."),
     //Tx 관련
 
     //Category 관련

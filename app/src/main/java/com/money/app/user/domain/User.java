@@ -13,7 +13,6 @@ import com.money.app.tx.domain.Tx;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //JPA용
 @AllArgsConstructor(access = AccessLevel.PRIVATE) //Buider용
 @Builder
@@ -82,18 +81,26 @@ public class User {
     @Builder.Default
     private List<Tx> txList = new ArrayList<>(); // List 초기화
 
-    public static User create(UserCreateDto dto){
+    public static User create(UserCreateDto dto, String encodedPassword){
         return User.builder()
                 .username(dto.getUsername())
                 .name(dto.getName())
                 .cellphone(dto.getCellphone())
                 .email(dto.getEmail())
-                .password(dto.getPassword())
+                .password(encodedPassword)
                 .birth(dto.getBirth())
                 .gender(dto.getGender())
                 .job(dto.getJob())
                 .prefer(null)
                 .build();
     }
-
+    public void update(String name, String cellphone, String email, LocalDate birth, String gender, String job, String prefer) {
+        this.name=name;
+        this.cellphone=cellphone;
+        this.email=email;
+        this.birth=birth;
+        this.gender=gender;
+        this.job=job;
+        this.prefer=prefer;
+    }
 }
