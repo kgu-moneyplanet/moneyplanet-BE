@@ -1,5 +1,6 @@
 package com.money.app.tx.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,9 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TxCreateDto {
+@AllArgsConstructor
+public class TxResponseDto {
+    private String id;
     private String userId;
     private LocalDate txDate;
     private TxType type;
@@ -21,4 +24,5 @@ public class TxCreateDto {
     private MethodType method;
     private String content;
     private String memo;
+    private ReportResponseDto reportResponseDto;
 }

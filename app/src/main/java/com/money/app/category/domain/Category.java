@@ -36,10 +36,6 @@ public class Category {
     @Builder.Default
     private List<Tx> txList = new ArrayList<>(); // List 초기화
 
-    public void update(String name) {
-        this.name = name;
-    }
-
     @PrePersist  //Insert 직전 db(JPA)에서 아래의 값을 수정
     public void onCreate() {
         this.createDatetime = LocalDateTime.now();
@@ -55,5 +51,8 @@ public class Category {
         return Category.builder()
                 .name(dto.getName())
                 .build();
+    }
+    public void update(String name) {
+        this.name = name;
     }
 }

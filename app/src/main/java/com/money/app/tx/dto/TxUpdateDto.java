@@ -11,8 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TxCreateDto {
-    private String userId;
+public class TxUpdateDto {
     private LocalDate txDate;
     private TxType type;
     private Long categoryId;
