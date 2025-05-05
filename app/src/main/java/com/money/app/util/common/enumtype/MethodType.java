@@ -1,4 +1,4 @@
-package com.money.app.util.common;
+package com.money.app.util.common.enumtype;
 
 public enum MethodType {
     CREDIT,  // 신용

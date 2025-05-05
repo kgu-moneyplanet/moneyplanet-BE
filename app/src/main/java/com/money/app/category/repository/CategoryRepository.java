@@ -1,8 +1,9 @@
 package com.money.app.category.repository;
 
-import java.util.Optional;
 import com.money.app.category.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     boolean existsByName(String name);   // 이름 중복 검사 메서드

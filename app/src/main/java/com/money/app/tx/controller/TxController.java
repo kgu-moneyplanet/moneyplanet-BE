@@ -2,7 +2,7 @@ package com.money.app.tx.controller;
 
 import com.money.app.security.CurrentUser;
 import com.money.app.tx.dto.ReportUpdateDto;
-import com.money.app.tx.dto.TxCreateRequestDto;
+import com.money.app.tx.dto.TxCreateDto;
 import com.money.app.tx.dto.TxResponseDto;
 import com.money.app.tx.dto.TxUpdateDto;
 import com.money.app.tx.service.TxService;
@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tx")
+@RequestMapping("/v1/tx")
 public class TxController {
 
     private final TxService txService;
@@ -26,7 +26,7 @@ public class TxController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<Void>> createTxWithReport(
-            @RequestBody TxCreateRequestDto dto,
+            @RequestBody TxCreateDto dto,
             @AuthenticationPrincipal CurrentUser currentUser) {
         String userId = currentUser.getUserId();
         txService.createTxWithReport(userId, dto);
@@ -57,8 +57,8 @@ public class TxController {
             @PathVariable String txId,
             @AuthenticationPrincipal CurrentUser currentUser){
         String userId = currentUser.getUserId();
-        txService.getTxWithReportById(userId, txId);
-        return ApiResponseUtil.success(HttpStatus.OK, "Tx 조회 성공");
+        TxResponseDto tx = txService.getTxWithReportById(userId, txId);
+        return ApiResponseUtil.success(HttpStatus.OK, "Tx 조회 성공", tx);
     }
 
     @GetMapping("/list/{txDate}")
@@ -66,8 +66,8 @@ public class TxController {
             @PathVariable LocalDate txDate,
             @AuthenticationPrincipal CurrentUser currentUser){
         String userId = currentUser.getUserId();
-        txService.getTxTodayByTxDate(userId, txDate);
-        return ApiResponseUtil.success(HttpStatus.OK,"Tx 리스트 조회 성공");
+        List<TxResponseDto> txs = txService.getTxTodayByTxDate(userId, txDate);
+        return ApiResponseUtil.success(HttpStatus.OK,"Tx 리스트 조회 성공", txs);
     }
 
     @PutMapping("/report/{txId}")
