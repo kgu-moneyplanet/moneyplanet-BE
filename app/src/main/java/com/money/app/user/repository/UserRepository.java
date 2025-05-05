@@ -5,6 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, String> {
-    Optional<User> findByEmail(String email);
-    Optional<User> findByNickname(String nickname); // 추가적으로 닉네임 중복 검사용
+    boolean existsByEmail(String email);  // 이메일 중복 체크
+    boolean existsByUsername(String username);  // 아이디 중복 체크
+    boolean existsByCellphone(String cellphone);  // 휴대전화번호 중복 체크
+    Optional<User> findById(String id); //PK로 유저 조회
+    Optional<User> findByEmail(String email); //유저 조회용
+    Optional<User> findByUsername(String username); //유저 조회용
 }

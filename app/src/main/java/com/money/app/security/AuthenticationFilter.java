@@ -29,8 +29,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         // 2) 토큰이 있으면 JWT 파싱 시도
         if (token != null) {
-            String userId = jwtService.getAuthUser(request);
             // 3) JWT가 유효해서 사용자 정보(id 등)를 꺼낼 수 있으면
+            String userId = jwtService.getAuthUser(request);
             if (userId != null) {
                 CurrentUser principal = new CurrentUser(userId);
                 Authentication authentication = // principal: 사용자 식별 값 (id)

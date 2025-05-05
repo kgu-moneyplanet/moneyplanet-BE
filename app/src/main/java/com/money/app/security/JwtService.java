@@ -3,6 +3,7 @@ package com.money.app.security;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import java.util.Date;
 @Component//bean주입
 public class JwtService {
 
+    @Autowired
     private static final long EXPIRATION_TIME = 86400000;
     private static final String PREFIX = "Bearer ";
 

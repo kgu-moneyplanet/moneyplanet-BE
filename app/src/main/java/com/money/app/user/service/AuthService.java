@@ -21,7 +21,7 @@ public class AuthService {
     public ResponseEntity<LoginResponseDto> login(LoginRequestDto request) {
         // 1) 인증 시도
         Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.email(), request.password())
+                new UsernamePasswordAuthenticationToken(request.id(), request.password())
         );
         // 2) 인증이 성공하면 auth.getName() 으로 “주체(subject)”를 꺼냄
         //    UserDetailsServiceImpl 에서 withUsername() 에 넣은 값, ID)
