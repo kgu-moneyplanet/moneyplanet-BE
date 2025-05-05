@@ -74,7 +74,7 @@ public class UserService {
 
     public void updateUser(String id, UserUpdateDto userUpdateDto) {
         //id(PK) 조회, cellphone, email 중복 검사
-        User user = userRepository.findById(id)
+        User user = userRepository.findByUsername(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         if (userRepository.existsByCellphone(userUpdateDto.getCellphone())) {
             throw new CustomException(ErrorCode.USER_CELLPHONE_ALREADY_EXISTS);
@@ -105,28 +105,14 @@ public class UserService {
     }
 
     public void deleteUser(String id) {
-        User user = userRepository.findById(id)
+        User user = userRepository.findByUsername(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
     }
 
     @Transactional(readOnly = true)
-    public UserResponseDto getUserById(String id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return UserResponseDto.fromEntity(user);
-    }
-
-    @Transactional(readOnly = true)
     public UserResponseDto getUserByUsername(String username) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return UserResponseDto.fromEntity(user);
-    }
-
-    @Transactional(readOnly = true)
-    public UserResponseDto getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return UserResponseDto.fromEntity(user);
     }

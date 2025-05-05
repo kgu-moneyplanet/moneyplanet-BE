@@ -10,8 +10,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import com.money.app.security.BlacklistToken;
-import com.money.app.security.BlacklistTokenRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +17,6 @@ public class AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final BlacklistTokenRepository blacklistTokenRepository;
 
     public ResponseEntity<LoginResponseDto> login(LoginRequestDto request) {
         // 1) 인증 시도
@@ -37,15 +34,5 @@ public class AuthService {
         LoginResponseDto body = new LoginResponseDto("Bearer", token);
         // 5) 헤더 + 바디 함께 반환
         return ResponseEntity.ok().headers(headers).body(body);
-    }
-
-    // 로그아웃 메서드
-    public ResponseEntity<String> logout(String token) {
-        // 블랙리스트에 JWT 토큰 추가
-        BlacklistToken blacklistToken = new BlacklistToken();
-        blacklistToken.setToken(token);
-        blacklistTokenRepository.save(blacklistToken);  // 블랙리스트에 저장
-
-        return ResponseEntity.ok("로그아웃 성공");
     }
 }

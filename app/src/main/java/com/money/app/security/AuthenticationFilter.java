@@ -29,14 +29,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         // 2) 토큰이 있으면 JWT 파싱 시도
         if (token != null) {
-            // 3) JWT 토큰이 블랙리스트에 있는지 확인
-            if (jwtService.isTokenBlacklisted(token)) {
-                // 블랙리스트에 있으면 인증을 막고 401 Unauthorized 응답을 반환
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("로그아웃된 토큰입니다. 다시 로그인해주세요.");
-                return;
-            }
-            // 4) JWT가 유효해서 사용자 정보(id 등)를 꺼낼 수 있으면
+            // 3) JWT가 유효해서 사용자 정보(id 등)를 꺼낼 수 있으면
             String userId = jwtService.getAuthUser(request);
             if (userId != null) {
                 CurrentUser principal = new CurrentUser(userId);

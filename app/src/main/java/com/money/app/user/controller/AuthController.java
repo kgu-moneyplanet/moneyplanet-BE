@@ -26,10 +26,4 @@ public class AuthController {
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto request) {
         return authService.login(request);
     }
-
-    @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<Object>> logout(@RequestHeader("Authorization") String token) {
-        authService.logout(token);  // 토큰을 블랙리스트에 추가
-        return ApiResponseUtil.success(HttpStatus.OK, "로그아웃 성공");
-    }
 }

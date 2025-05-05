@@ -16,7 +16,6 @@ import java.util.Date;
 public class JwtService {
 
     @Autowired
-    private BlacklistTokenRepository blacklistTokenRepository;
     private static final long EXPIRATION_TIME = 86400000;
     private static final String PREFIX = "Bearer ";
 
@@ -51,9 +50,5 @@ public class JwtService {
                     .getSubject();
         }
         return null;
-    }
-
-    public boolean isTokenBlacklisted(String token) {
-        return blacklistTokenRepository.existsByToken(token);  // 토큰이 블랙리스트에 있으면 true 반환
     }
 }
