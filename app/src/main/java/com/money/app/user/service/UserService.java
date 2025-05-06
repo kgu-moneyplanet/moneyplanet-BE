@@ -6,6 +6,8 @@ import com.money.app.user.dto.UserResponseDto;
 import com.money.app.user.dto.UserUpdateDto;
 import com.money.app.util.exception.*;
 import com.money.app.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ import java.util.List;
 @Service
 public class UserService {
 
+    @Autowired
+    private AuthService authService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     public UserService(UserRepository userRepository) {
@@ -74,12 +78,12 @@ public class UserService {
 
     public void updateUser(String id, UserUpdateDto userUpdateDto) {
         //id(PK) 조회, cellphone, email 중복 검사
-        User user = userRepository.findByUsername(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        if (userRepository.existsByCellphone(userUpdateDto.getCellphone())) {
+        if (!user.getCellphone().equals(userUpdateDto.getCellphone()) && userRepository.existsByCellphone(userUpdateDto.getCellphone())) {
             throw new CustomException(ErrorCode.USER_CELLPHONE_ALREADY_EXISTS);
         }
-        if (userRepository.existsByEmail(userUpdateDto.getEmail())) {
+        if (!user.getEmail().equals(userUpdateDto.getEmail()) && userRepository.existsByEmail(userUpdateDto.getEmail())) {
             throw new CustomException(ErrorCode.USER_EMAIL_ALREADY_EXISTS);
         }
         
@@ -104,15 +108,16 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(String id) {
-        User user = userRepository.findByUsername(id)
+    public void deleteUser(String id, HttpServletRequest request) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        authService.logout(request);
         userRepository.delete(user);
     }
 
     @Transactional(readOnly = true)
-    public UserResponseDto getUserByUsername(String username) {
-        User user = userRepository.findByUsername(username)
+    public UserResponseDto getUserById(String id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return UserResponseDto.fromEntity(user);
     }

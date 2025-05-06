@@ -8,6 +8,7 @@ import com.money.app.user.dto.UserUpdateDto;
 import com.money.app.user.service.UserService;
 import com.money.app.util.response.ApiResponse;
 import com.money.app.util.response.ApiResponseUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,16 +41,16 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<ApiResponse<Void>> deletedUser(@AuthenticationPrincipal CurrentUser currentUser) {
+    public ResponseEntity<ApiResponse<Void>> deletedUser(@AuthenticationPrincipal CurrentUser currentUser, HttpServletRequest request) {
         String id=currentUser.getUserId();
-        userService.deleteUser(id);
+        userService.deleteUser(id, request);
         return ApiResponseUtil.success(HttpStatus.OK,"회원 탈퇴 성공");
     }
 
     @GetMapping("/get")
     public ResponseEntity<ApiResponse<UserResponseDto>> getUserByUsername(@AuthenticationPrincipal CurrentUser currentUser) {
         String id=currentUser.getUserId();
-        UserResponseDto user=userService.getUserByUsername(id);
+        UserResponseDto user=userService.getUserById(id);
         return ApiResponseUtil.success(HttpStatus.OK,"회원 조회 성공", user);
     }
 }
