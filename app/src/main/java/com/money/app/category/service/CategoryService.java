@@ -1,16 +1,15 @@
 package com.money.app.category.service;
 
-import java.util.List;
 import com.money.app.category.domain.Category;
-import com.money.app.category.dto.CategoryDeleteDto;
 import com.money.app.category.dto.CategoryResponseDto;
 import com.money.app.category.dto.CategoryUpdateDto;
 import com.money.app.category.repository.CategoryRepository;
-import com.money.app.category.dto.CategoryCreateDto;
-import com.money.app.util.exception.ErrorCode;
 import com.money.app.util.exception.CustomException;
-import org.springframework.transaction.annotation.Transactional;
+import com.money.app.util.exception.ErrorCode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class CategoryService {
@@ -25,10 +24,7 @@ public class CategoryService {
         if (categoryRepository.existsByName(name)) {
             throw new CustomException(ErrorCode.CATEGORY_ALREADY_EXISTS);
         }
-        // 저장 Dto -> Entity로
-        CategoryCreateDto dto = new CategoryCreateDto();
-        dto.setName(name);
-        Category category = Category.create(dto);
+        Category category = Category.create(name);
 
         categoryRepository.save(category);
     }
@@ -59,16 +55,23 @@ public class CategoryService {
         List<Category> categories = categoryRepository.findAll();
         if (categories.isEmpty()){
             throw new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
-        };
+        }
         return categories.stream()
                 .map(category -> new CategoryResponseDto(category.getId(), category.getName()))
                 .toList();
     }
-    @Transactional(readOnly = true)
 
+    @Transactional(readOnly = true)
     public CategoryResponseDto getCategoryByName(String name) {
         Category category = categoryRepository.findByName(name)
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND)); // 값이 없으면 예외로 던짐
         return new CategoryResponseDto(category.getId(), category.getName());
+    }
+
+    @Transactional(readOnly = true)
+    public Category getCategoryEntityById(Long id){
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+        return category;
     }
 }

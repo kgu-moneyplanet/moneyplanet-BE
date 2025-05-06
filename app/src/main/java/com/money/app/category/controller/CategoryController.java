@@ -1,19 +1,18 @@
 package com.money.app.category.controller;
 
-import java.util.List;
-import com.money.app.category.dto.CategoryCreateDto;
-import com.money.app.category.dto.CategoryDeleteDto;
 import com.money.app.category.dto.CategoryResponseDto;
 import com.money.app.category.dto.CategoryUpdateDto;
 import com.money.app.category.service.CategoryService;
 import com.money.app.util.response.ApiResponse;
 import com.money.app.util.response.ApiResponseUtil;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/v1/category")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -22,9 +21,9 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<Void>> createCategory(@RequestBody CategoryCreateDto dto) {
-        categoryService.createCategory(dto.getName());
+    @PostMapping("/{name}")
+    public ResponseEntity<ApiResponse<Void>> createCategory(@PathVariable String name) {
+        categoryService.createCategory(name);
         return ApiResponseUtil.success(HttpStatus.CREATED, "카테고리 생성 성공");
     }
 

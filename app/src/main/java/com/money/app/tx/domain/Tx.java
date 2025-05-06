@@ -1,19 +1,16 @@
 package com.money.app.tx.domain;
 
+import com.money.app.category.domain.Category;
+import com.money.app.user.domain.User;
+import com.money.app.util.common.enumtype.AbcType;
+import com.money.app.util.common.enumtype.MethodType;
+import com.money.app.util.common.enumtype.TxType;
+import com.money.app.util.ulid.UlidUtil;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.AccessLevel;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import com.money.app.category.domain.Category;
-import com.money.app.user.domain.User;
-import com.money.app.tx.dto.TxCreateDto;
-import com.money.app.util.ulid.UlidUtil;
 
 @Getter        // getName 등 get 메소드 자동생성
 @NoArgsConstructor(access = AccessLevel.PROTECTED)   // 파라미터 없는 기본 생성자 생성(JPA용)
@@ -47,9 +44,9 @@ public class Tx {
     private AbcType abc;
 
     @Column(nullable = false)
-    private int amount;
+    private Long amount;
 
-    @Column(length = 26)
+    @Column(length = 26, nullable = false)
     @Enumerated(EnumType.STRING)
     private MethodType method;  // 예: CARD, CASH 등
 
@@ -77,18 +74,30 @@ public class Tx {
         this.updateDatetime = LocalDateTime.now();
     }
 
-    public static Tx create(User user, Category category, TxCreateDto dto) {
+    public static Tx create(User user, Category category, LocalDate txDate, TxType type,
+                            AbcType abc, Long amount, MethodType method, String content, String memo) {
         return Tx.builder()
                 .id(UlidUtil.generate())
                 .user(user)
-                .txDate(dto.getTxDate())
-                .type(dto.getType())
+                .txDate(txDate)
+                .type(type)
                 .category(category)
-                .abc(dto.getAbc())
-                .amount(dto.getAmount())
-                .method(dto.getMethod())
-                .content(dto.getContent())
-                .memo(dto.getMemo())
+                .abc(abc)
+                .amount(amount)
+                .method(method)
+                .content(content)
+                .memo(memo)
                 .build();
+    }
+    public void update(Category category, LocalDate txDate, TxType type, AbcType abc,
+                       Long amount, MethodType method, String content, String memo) {
+        this.txDate = txDate;
+        this.type = type;
+        this.category = category;
+        this.abc = abc;
+        this.amount = amount;
+        this.method = method;
+        this.content = content;
+        this.memo = memo;
     }
 }

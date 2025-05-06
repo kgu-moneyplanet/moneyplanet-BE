@@ -18,9 +18,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String id) { //AuthenticationManager.authenticate() 내부에서 호출
         User user = userRepository.findByUsername(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_ID_NOT_FOUND));
-
         return org.springframework.security.core.userdetails.User //Spring Security용 UserDetails 객체 반환
-                .withUsername(user.getId()) //이 부분 수정해야함
+                .withUsername(user.getId())
                 .password(user.getPassword())
                 .build();
     }

@@ -1,13 +1,11 @@
 package com.money.app.category.domain;
 
-import com.money.app.category.dto.CategoryCreateDto;
+import com.money.app.stat.dailystat.domain.DailyStat;
+import com.money.app.stat.monthlystat.domain.MonthlyStat;
+import com.money.app.stat.weeklystat.domain.WeeklyStat;
 import com.money.app.tx.domain.Tx;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.AccessLevel;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,9 +34,17 @@ public class Category {
     @Builder.Default
     private List<Tx> txList = new ArrayList<>(); // List 초기화
 
-    public void update(String name) {
-        this.name = name;
-    }
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<DailyStat> dailyStatList = new ArrayList<>(); // List 초기화
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<WeeklyStat> weeklyStatList = new ArrayList<>(); // List 초기화
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<MonthlyStat> monthlyStatList = new ArrayList<>(); // List 초기화
 
     @PrePersist  //Insert 직전 db(JPA)에서 아래의 값을 수정
     public void onCreate() {
@@ -51,9 +57,12 @@ public class Category {
         this.updateDatetime = LocalDateTime.now();
     }
 
-    public static Category create(CategoryCreateDto dto) {
+    public static Category create(String name) {
         return Category.builder()
-                .name(dto.getName())
+                .name(name)
                 .build();
+    }
+    public void update(String name) {
+        this.name = name;
     }
 }

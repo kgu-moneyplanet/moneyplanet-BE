@@ -113,12 +113,18 @@ public class UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         authService.logout(request);
         userRepository.delete(user);
-    }
-
+      }
     @Transactional(readOnly = true)
     public UserResponseDto getUserById(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return UserResponseDto.fromEntity(user);
+
+    }
+    @Transactional(readOnly = true)
+    public User getUserEntityById(String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return user;
     }
 }

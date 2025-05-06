@@ -1,7 +1,9 @@
 package com.money.app.tx.domain;
+import com.money.app.util.common.enumtype.AbcType;
+import com.money.app.util.ulid.UlidUtil;
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 @Getter        // getName 등 get 메소드 자동생성
@@ -42,6 +44,25 @@ public class Report {
     @PreUpdate  //Update 직전 db(JPA)에서 아래의 값을 수정
     public void onUpdate() {
         this.updateDatetime = LocalDateTime.now();
+    }
+
+    public static Report create(Tx tx, AbcType abc, String reason, String feedback){
+        return Report.builder()
+                .id(UlidUtil.generate())
+                .tx(tx)
+                .abc(abc)
+                .reason(reason)
+                .feedback(feedback)
+                .build();
+    }
+
+    public void updateAbc(AbcType abc){
+        this.abc = abc;
+    }
+
+    public void update(String reason, String feedback){
+        this.reason = reason;
+        this.feedback = feedback;
     }
 }
 

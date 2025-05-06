@@ -1,4 +1,4 @@
-package com.money.app.tx.domain;
+package com.money.app.util.common.enumtype;
 
 public enum AbcType {
     A, // 필요지출
