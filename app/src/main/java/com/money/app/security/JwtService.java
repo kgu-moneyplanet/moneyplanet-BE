@@ -1,5 +1,6 @@
 package com.money.app.security;
 
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Component//bean주입
@@ -50,5 +53,35 @@ public class JwtService {
                     .getSubject();
         }
         return null;
+    }
+    // 1. 토큰 유효성 검사
+    public boolean validateToken(String token) {
+        try {
+            io.jsonwebtoken.Jwts.parser()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token); // 토큰을 파싱하고 유효성 검사
+            return true;
+        } catch (Exception e) {
+            return false;  // 토큰이 유효하지 않거나 파싱에 실패하면 false 반환
+        }
+    }
+
+    // 2. 토큰의 만료 시간 추출
+    public LocalDateTime getExpiration(String token) {
+        try {
+            Date expiration = io.jsonwebtoken.Jwts.parser()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getExpiration(); // 만료 시간 가져오기
+
+            return expiration.toInstant()
+                    .atZone(ZoneId.systemDefault()) // LocalDateTime 변환
+                    .toLocalDateTime();
+        } catch (Exception e) {
+            throw new RuntimeException("토큰의 만료 시간을 추출하는 데 실패했습니다.");
+        }
     }
 }

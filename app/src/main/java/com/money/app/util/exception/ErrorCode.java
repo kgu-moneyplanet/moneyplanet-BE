@@ -10,6 +10,7 @@ public enum ErrorCode {
     PASSWORD_NOT_CORRECT(HttpStatus.CONFLICT,"비밀번호가 틀렸습니다"),
     TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "토큰이 없습니다"),
     TOKEN_TIME_OUT(HttpStatus.UNAUTHORIZED, "토큰 시간 만료"),
+    TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰"),
 
     //User 관련
     USER_ID_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 ID 입니다."),
