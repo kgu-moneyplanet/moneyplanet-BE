@@ -1,18 +1,18 @@
 package com.money.app.tx.dto;
 
+import com.money.app.util.common.enumtype.AbcType;
+import com.money.app.util.common.enumtype.MethodType;
+import com.money.app.util.common.enumtype.TxType;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
-import com.money.app.util.common.AbcType;
-import com.money.app.util.common.MethodType;
-import com.money.app.util.common.TxType;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class TxCreateDto {
-    private String userId;
     private LocalDate txDate;
     private TxType type;
     private Long categoryId;
@@ -21,4 +21,6 @@ public class TxCreateDto {
     private MethodType method;
     private String content;
     private String memo;
+    private String reason;
+    private String feedback;
 }

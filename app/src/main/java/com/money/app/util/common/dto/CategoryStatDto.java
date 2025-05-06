@@ -1,4 +1,4 @@
-package com.money.app.tx.dto;
+package com.money.app.util.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportUpdateDto {
-    private String reason;
-    private String feedback;
+public class CategoryStatDto {
+    private Long categoryId;
+    private String categoryName;
+    private Long amount;
 }

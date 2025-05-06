@@ -1,5 +1,8 @@
 package com.money.app.user.domain;
 
+import com.money.app.stat.dailystat.domain.DailyStat;
+import com.money.app.stat.monthlystat.domain.MonthlyStat;
+import com.money.app.stat.weeklystat.domain.WeeklyStat;
 import com.money.app.user.dto.UserCreateDto;
 import com.money.app.util.ulid.UlidUtil;
 import jakarta.persistence.*;
@@ -62,6 +65,23 @@ public class User {
     @Column(length = 255, nullable = true) //추후 수정
     private String prefer;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Tx> txList = new ArrayList<>(); // List 초기화
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<DailyStat> dailyStatList = new ArrayList<>(); // List 초기화
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<WeeklyStat> weeklyStatList = new ArrayList<>(); // List 초기화
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<MonthlyStat> monthlyStatList = new ArrayList<>(); // List 초기화
+
+
     @PrePersist
     public void onCreate() {
         if(id==null) this.id= UlidUtil.generate();
@@ -77,9 +97,6 @@ public class User {
     public void onUpdate() {
         this.updateDatetime= LocalDateTime.now();
     }
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<Tx> txList = new ArrayList<>(); // List 초기화
 
     public static User create(UserCreateDto dto, String encodedPassword){
         return User.builder()

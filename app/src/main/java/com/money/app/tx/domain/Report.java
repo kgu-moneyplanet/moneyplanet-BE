@@ -1,7 +1,5 @@
 package com.money.app.tx.domain;
-import com.money.app.tx.dto.ReportCreateDto;
-import com.money.app.tx.dto.ReportUpdateDto;
-import com.money.app.util.common.AbcType;
+import com.money.app.util.common.enumtype.AbcType;
 import com.money.app.util.ulid.UlidUtil;
 import jakarta.persistence.*;
 import lombok.*;
@@ -48,13 +46,13 @@ public class Report {
         this.updateDatetime = LocalDateTime.now();
     }
 
-    public static Report create(Tx tx, ReportCreateDto dto){
+    public static Report create(Tx tx, AbcType abc, String reason, String feedback){
         return Report.builder()
                 .id(UlidUtil.generate())
                 .tx(tx)
-                .abc(dto.getAbc())
-                .reason(dto.getReason())
-                .feedback(dto.getFeedback())
+                .abc(abc)
+                .reason(reason)
+                .feedback(feedback)
                 .build();
     }
 
@@ -62,9 +60,9 @@ public class Report {
         this.abc = abc;
     }
 
-    public void update(ReportUpdateDto dto){
-        this.reason = dto.getReason();
-        this.feedback = dto.getFeedback();
+    public void update(String reason, String feedback){
+        this.reason = reason;
+        this.feedback = feedback;
     }
 }
 

@@ -1,15 +1,15 @@
 package com.money.app.category.service;
 
-import java.util.List;
 import com.money.app.category.domain.Category;
 import com.money.app.category.dto.CategoryResponseDto;
 import com.money.app.category.dto.CategoryUpdateDto;
 import com.money.app.category.repository.CategoryRepository;
-import com.money.app.category.dto.CategoryCreateDto;
-import com.money.app.util.exception.ErrorCode;
 import com.money.app.util.exception.CustomException;
-import org.springframework.transaction.annotation.Transactional;
+import com.money.app.util.exception.ErrorCode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class CategoryService {
@@ -24,10 +24,7 @@ public class CategoryService {
         if (categoryRepository.existsByName(name)) {
             throw new CustomException(ErrorCode.CATEGORY_ALREADY_EXISTS);
         }
-        // 저장 Dto -> Entity로
-        CategoryCreateDto dto = new CategoryCreateDto();
-        dto.setName(name);
-        Category category = Category.create(dto);
+        Category category = Category.create(name);
 
         categoryRepository.save(category);
     }

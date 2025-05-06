@@ -1,15 +1,17 @@
-package com.money.app.tx.dto;
+package com.money.app.util.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportUpdateDto {
-    private String reason;
-    private String feedback;
+public class CateAbcResoponseDto {
+    List<CateAbcStatDto> cateAbcStatDtoList;
+    Long totalAmount;
 }

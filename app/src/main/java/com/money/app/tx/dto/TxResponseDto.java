@@ -1,12 +1,13 @@
 package com.money.app.tx.dto;
 
+import com.money.app.util.common.enumtype.AbcType;
+import com.money.app.util.common.enumtype.MethodType;
+import com.money.app.util.common.enumtype.TxType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
-import com.money.app.util.common.AbcType;
-import com.money.app.util.common.MethodType;
-import com.money.app.util.common.TxType;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
 @Getter

@@ -1,4 +1,4 @@
-package com.money.app.util.common;
+package com.money.app.util.common.enumtype;
 
 public enum TxType {
     INCOME, // 수입
