@@ -20,7 +20,8 @@ public class JwtService {
     @Autowired
     private static final long EXPIRATION_TIME = 86400000;
     private static final String PREFIX = "Bearer ";
-
+    @Autowired
+    private BlacklistTokenRepository blacklistTokenRepository;
     @Value("${JWT_SECRET}")
     private String secret;
 
@@ -82,5 +83,9 @@ public class JwtService {
         } catch (Exception e) {
             throw new RuntimeException("토큰의 만료 시간을 추출하는 데 실패했습니다.");
         }
+    }
+    public boolean isBlacklisted(String token) {
+        // DB나 Redis에서 token이 존재하는지 확인
+        return blacklistTokenRepository.existsByToken(token);
     }
 }
