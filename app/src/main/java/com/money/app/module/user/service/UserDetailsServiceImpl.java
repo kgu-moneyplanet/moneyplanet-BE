@@ -1,0 +1,26 @@
+package com.money.app.module.user.service;
+
+import com.money.app.module.user.domain.User;
+import com.money.app.module.user.repository.UserRepository;
+import com.money.app.util.exception.CustomException;
+import com.money.app.util.exception.ErrorCode;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor //final 필드 자동주입
+public class UserDetailsServiceImpl implements UserDetailsService {
+
+    private final UserRepository userRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String id) { //AuthenticationManager.authenticate() 내부에서 호출
+        User user = userRepository.findByUsername(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_ID_NOT_FOUND));
+        return org.springframework.security.core.userdetails.User //Spring Security용 UserDetails 객체 반환
+                .withUsername(user.getId())
+                .password(user.getPassword())
+                .build();
+    }
+}

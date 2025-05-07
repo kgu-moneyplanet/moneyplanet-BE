@@ -2,7 +2,7 @@ package com.money.app.config;
 
 import com.money.app.security.AuthenticationFilter;
 import com.money.app.security.AuthEntryPoint;
-import com.money.app.user.service.UserDetailsServiceImpl;
+import com.money.app.module.user.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
