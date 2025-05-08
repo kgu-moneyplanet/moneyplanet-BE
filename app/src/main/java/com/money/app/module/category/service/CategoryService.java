@@ -19,6 +19,20 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    @Transactional
+    public void setupCategory() {
+        if (categoryRepository.count() == 0){
+            List<String> categoryList = List.of("식비","교통/차량","문화생활","마트/편의점","패션/미용",
+                    "생활용품","주거/통신","건강","교육",
+                    "경조사/회비","부모님","저축성 지출","세금","반려동물","기타");
+            for (String name : categoryList){
+                if(!categoryRepository.existsByName(name)){
+                    categoryRepository.save(Category.create(name));
+                }
+            }
+        }
+    }
+
     public void createCategory(String name) {
         // 중복 검사
         if (categoryRepository.existsByName(name)) {
@@ -28,6 +42,7 @@ public class CategoryService {
 
         categoryRepository.save(category);
     }
+
     @Transactional //트랜잭션 보장
     public void updateCategory(Long id, CategoryUpdateDto dto) {
         // ID로 기존 카테고리 조회
