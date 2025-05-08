@@ -62,9 +62,9 @@ public class SecurityConfig {
                         // 1) 로그인 API
                         .requestMatchers(HttpMethod.POST,
                                 "/login").permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/v1/user").permitAll()
                         .requestMatchers("/error").permitAll()
-                        // 회원가입
-                        .requestMatchers(HttpMethod.POST, "/users/create").permitAll()
                         // 2) OpenAPI 스펙 (JSON/YAML)
                         .requestMatchers(
                                 "/v3/api-docs/**",             // 전체 스펙 JSON

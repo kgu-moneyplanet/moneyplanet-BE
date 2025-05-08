@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: app
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+
+  security:
+    enabled: true
+    user:
+      name: ${SECURE_USERNAME}
+      password: ${SECURE_PASSWORD}
+      roles: ${SECURE_ROLE}
+
+springdoc:
+  swagger-ui:
+    enabled: true
+
+jwt:
+  secret: ${JWT_SECRET}
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        web: DEBUG
