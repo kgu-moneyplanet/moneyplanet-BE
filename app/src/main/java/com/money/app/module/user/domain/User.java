@@ -60,7 +60,10 @@ public class User {
 
     private LocalDateTime updateDatetime;
 
-    private int target;
+    private double target;
+
+    @Column(nullable = false)
+    private boolean achieved = false;
 
     @Column(length = 255, nullable = true) //추후 수정
     private String prefer;
@@ -119,5 +122,13 @@ public class User {
         this.gender=gender;
         this.job=job;
         this.prefer=prefer;
+    }
+
+    public void increaseTargetByPercent(double percent) {
+        this.target += percent;
+        if (this.target >= 100) {
+            // 목표 도달
+            this.achieved = true;
+        }
     }
 }
