@@ -22,7 +22,7 @@ public class UserResponseDto { //외부 응답용(프론트용), Server->Client,
     private LocalDate birth;
     private String gender;
     private String job;
-    private int target;
+    private double target;
     private String prefer;
 
 
