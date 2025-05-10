@@ -62,8 +62,7 @@ public class User {
 
     private double target;
 
-    @Column(nullable = false)
-    private boolean achieved = false;
+    private boolean achieved;
 
     @Column(length = 255, nullable = true) //추후 수정
     private String prefer;
@@ -94,6 +93,7 @@ public class User {
         this.planet=null;
         this.totalIncome=0;
         this.totalExpense=0;
+        this.achieved=false;
     }
 
     @PreUpdate

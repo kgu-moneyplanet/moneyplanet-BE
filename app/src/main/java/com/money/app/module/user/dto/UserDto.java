@@ -27,6 +27,7 @@ public class UserDto { //내부 로직에 사용
     private LocalDateTime createDatetime;
     private LocalDateTime updateDatetime;
     private double target;
+    private boolean achieved;
     private String prefer;
 
     public static UserDto fromEntity(User user) {

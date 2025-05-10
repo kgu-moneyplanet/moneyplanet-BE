@@ -23,6 +23,7 @@ public class UserResponseDto { //외부 응답용(프론트용), Server->Client,
     private String gender;
     private String job;
     private double target;
+    private boolean achieved;
     private String prefer;
 
 
