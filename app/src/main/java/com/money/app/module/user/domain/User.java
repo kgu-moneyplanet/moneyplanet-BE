@@ -60,7 +60,9 @@ public class User {
 
     private LocalDateTime updateDatetime;
 
-    private int target;
+    private double target;
+
+    private boolean achieved;
 
     @Column(length = 255, nullable = true) //추후 수정
     private String prefer;
@@ -91,6 +93,7 @@ public class User {
         this.planet=null;
         this.totalIncome=0;
         this.totalExpense=0;
+        this.achieved=false;
     }
 
     @PreUpdate
@@ -119,5 +122,13 @@ public class User {
         this.gender=gender;
         this.job=job;
         this.prefer=prefer;
+    }
+
+    public void increaseTargetByPercent(double percent) {
+        this.target += percent;
+        if (this.target >= 100) {
+            // 목표 도달
+            this.achieved = true;
+        }
     }
 }
