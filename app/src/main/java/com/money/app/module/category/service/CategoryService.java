@@ -24,7 +24,7 @@ public class CategoryService {
         if (categoryRepository.count() == 0){
             List<String> categoryList = List.of("식비","교통/차량","문화생활","마트/편의점","패션/미용",
                     "생활용품","주거/통신","건강","교육",
-                    "경조사/회비","부모님","저축성 지출","세금","반려동물","기타");
+                    "경조사/회비","부모님","저축성 지출","세금","반려동물","기타", "월급");
             for (String name : categoryList){
                 if(!categoryRepository.existsByName(name)){
                     categoryRepository.save(Category.create(name));

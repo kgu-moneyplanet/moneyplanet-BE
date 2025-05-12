@@ -5,9 +5,9 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile
-    image: moneyplanet-server:latest
+    image: moneyplanet-spring-server:latest
     restart: always
-    container_name: moneyplanet-server
+    container_name: moneyplanet-spring-server
     depends_on:
       - moneyplanet-db
       - moneyplanet-redis
@@ -18,7 +18,7 @@ services:
 
   moneyplanet-db:
     image: mysql:8.0.33
-    container_name: moneyplanet-db
+    container_name: moneyplanet-spring-db
     restart: always
     ports:
       - "3307:3306"
@@ -34,7 +34,7 @@ services:
 
   moneyplanet-redis:
     image: redis:7.2
-    container_name: moneyplanet-redis
+    container_name: moneyplanet-spring-redis
     restart: always
     ports:
       - "6379:6379"
