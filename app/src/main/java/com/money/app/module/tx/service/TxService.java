@@ -1,5 +1,6 @@
 package com.money.app.module.tx.service;
 
+import com.money.app.external.FastApiConnect;
 import com.money.app.module.category.domain.Category;
 import com.money.app.module.category.service.CategoryService;
 import com.money.app.module.stat.dailystat.service.DailyStatService;
@@ -34,10 +35,12 @@ public class TxService {
     private final DailyStatService dailyStatService;
     private final WeeklyStatService weeklyStatService;
     private final MonthlyStatService monthlyStatService;
+    private final FastApiConnect fastApiConnect;
 
     public TxService(TxRepository txRepository, ReportRepository reportRepository,
                      CategoryService categoryService, UserService userService, DailyStatService dailyStatService
-                    , WeeklyStatService weeklyStatService, MonthlyStatService monthlyStatService) {
+                    , WeeklyStatService weeklyStatService, MonthlyStatService monthlyStatService,
+                     FastApiConnect fastApiConnect) {
         this.txRepository = txRepository;
         this.reportRepository = reportRepository;
         this.categoryService = categoryService;
@@ -45,6 +48,7 @@ public class TxService {
         this.dailyStatService = dailyStatService;
         this.weeklyStatService = weeklyStatService;
         this.monthlyStatService = monthlyStatService;
+        this.fastApiConnect = fastApiConnect;
     }
     @Transactional
     public void createTxWithReport(String userId, TxCreateDto dto) {
@@ -234,6 +238,27 @@ public class TxService {
             throw new CustomException(ErrorCode.USER_NOT_FOUND); // 사용자가 소유자가 아님
         }
         report.update(dto.getReason(), dto.getFeedback());
+    }
+
+    public DecisionResponseDto decideAbc(String userId, DecisionRequsetDto dto){
+        User user = userService.getUserEntityById(userId);
+        Category category = categoryService.getCategoryEntityById(dto.getCategoryId());
+
+        InputSchema input = new InputSchema(
+                user.getId(),
+                user.getPlanet(),
+                user.getGender(),
+                user.getPrefer(),
+                LocalDate.now().getYear() - user.getBirth().getYear(),
+                user.getJob(),
+                dto.getTxDate(),
+                dto.getAmount().intValue(),
+                category.getName(),
+                dto.getContent(),
+                dto.getMemo()
+        );
+
+        return fastApiConnect.getAbcDecision(input);
     }
 }
 

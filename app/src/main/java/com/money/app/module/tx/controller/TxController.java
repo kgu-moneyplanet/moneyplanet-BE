@@ -1,10 +1,7 @@
 package com.money.app.module.tx.controller;
 
-import com.money.app.module.tx.dto.TxCreateDto;
+import com.money.app.module.tx.dto.*;
 import com.money.app.security.CurrentUser;
-import com.money.app.module.tx.dto.ReportUpdateDto;
-import com.money.app.module.tx.dto.TxResponseDto;
-import com.money.app.module.tx.dto.TxUpdateDto;
 import com.money.app.module.tx.service.TxService;
 import com.money.app.util.response.ApiResponse;
 import com.money.app.util.response.ApiResponseUtil;
@@ -78,6 +75,15 @@ public class TxController {
         String userId = currentUser.getUserId();
         txService.updateReportById(userId, txId, dto);
         return ApiResponseUtil.success(HttpStatus.OK, "Report 수정 성공");
+    }
+
+    @PostMapping("/decision")
+    public ResponseEntity<ApiResponse<DecisionResponseDto>> decideAbc(
+            @RequestBody DecisionRequsetDto dto,
+            @AuthenticationPrincipal CurrentUser currentUser){
+        String userId = currentUser.getUserId();
+        DecisionResponseDto result = txService.decideAbc(userId, dto);
+        return ApiResponseUtil.success(HttpStatus.OK, "ABC 판단 성공", result);
     }
 
 }
