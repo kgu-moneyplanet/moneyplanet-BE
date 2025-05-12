@@ -13,13 +13,15 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @RequiredArgsConstructor
 public class FastApiConnect {
-    private final RestTemplate restTemplate;
+
+    // 이름 일치시킴
+    private final RestTemplate fastApiRestTemplate;
 
     public DecisionResponseDto getAbcDecision(InputSchema input) {
-        String fastApiUrl = "http://fastapi:8000/decide"; // Docker 내부 주소
+        String fastApiUrl = "http://fastapi:8000/decide";
 
         try {
-            ResponseEntity<DecisionResponseDto> response = restTemplate.postForEntity(
+            ResponseEntity<DecisionResponseDto> response = fastApiRestTemplate.postForEntity(
                     fastApiUrl, input, DecisionResponseDto.class
             );
             return response.getBody();
