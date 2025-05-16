@@ -14,6 +14,5 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class DecisionResponseDto {
     private AbcType abcType;
-    private String reason;
     private String feedback;
 }
