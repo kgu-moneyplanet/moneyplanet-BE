@@ -1,6 +1,6 @@
 package com.money.app.module.user.dto;
-import com.money.app.module.user.domain.Planet;
 import com.money.app.module.user.domain.User;
+import com.money.app.util.common.enumtype.PlanetType;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -17,7 +17,7 @@ public class UserDto { //내부 로직에 사용
     private String name;
     private String cellphone;
     private String email;
-    private Planet planet;
+    private PlanetType planet;
     private String password;
     private int totalIncome;
     private int totalExpense;
@@ -26,7 +26,8 @@ public class UserDto { //내부 로직에 사용
     private String job;
     private LocalDateTime createDatetime;
     private LocalDateTime updateDatetime;
-    private int target;
+    private double target;
+    private boolean achieved;
     private String prefer;
 
     public static UserDto fromEntity(User user) {

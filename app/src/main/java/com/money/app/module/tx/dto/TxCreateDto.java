@@ -21,6 +21,5 @@ public class TxCreateDto {
     private MethodType method;
     private String content;
     private String memo;
-    private String reason;
     private String feedback;
 }

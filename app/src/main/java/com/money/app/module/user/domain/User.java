@@ -4,6 +4,7 @@ import com.money.app.module.stat.monthlystat.domain.MonthlyStat;
 import com.money.app.module.stat.weeklystat.domain.WeeklyStat;
 import com.money.app.module.stat.dailystat.domain.DailyStat;
 import com.money.app.module.user.dto.UserCreateDto;
+import com.money.app.util.common.enumtype.PlanetType;
 import com.money.app.util.ulid.UlidUtil;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,10 +42,6 @@ public class User {
     @Column(length = 100, nullable = false) //비밀번호 해시화 후 저장
     private String password;
 
-    @Column(length = 26, nullable = true)
-    @Enumerated(EnumType.STRING)
-    private Planet planet; //회원가입 전 NULL 혹은 DEFAULT
-
     private int totalIncome;
 
     private int totalExpense;
@@ -60,10 +57,15 @@ public class User {
 
     private LocalDateTime updateDatetime;
 
-    private int target;
+    private double target;
+
+    private boolean achieved;
 
     @Column(length = 255, nullable = true) //추후 수정
     private String prefer;
+
+    @Enumerated(EnumType.STRING)
+    private PlanetType planet;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
@@ -88,9 +90,9 @@ public class User {
         this.createDatetime=LocalDateTime.now();
         this.updateDatetime=LocalDateTime.now();
         this.target=0;
-        this.planet=null;
         this.totalIncome=0;
         this.totalExpense=0;
+        this.achieved=false;
     }
 
     @PreUpdate
@@ -108,10 +110,11 @@ public class User {
                 .birth(dto.getBirth())
                 .gender(dto.getGender())
                 .job(dto.getJob())
-                .prefer(null)
+                .prefer(dto.getPrefer())
+                .planet(dto.getPlanet())
                 .build();
     }
-    public void update(String name, String cellphone, String email, LocalDate birth, String gender, String job, String prefer) {
+    public void update(String name, String cellphone, String email, LocalDate birth, String gender, String job, String prefer, PlanetType planet) {
         this.name=name;
         this.cellphone=cellphone;
         this.email=email;
@@ -119,5 +122,14 @@ public class User {
         this.gender=gender;
         this.job=job;
         this.prefer=prefer;
+        this.planet=planet;
+    }
+
+    public void increaseTargetByPercent(double percent) {
+        this.target += percent;
+        if (this.target >= 100) {
+            // 목표 도달
+            this.achieved = true;
+        }
     }
 }

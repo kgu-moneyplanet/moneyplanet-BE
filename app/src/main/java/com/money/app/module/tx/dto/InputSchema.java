@@ -1,7 +1,7 @@
 package com.money.app.module.tx.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import com.money.app.module.user.domain.Planet;
+import com.money.app.util.common.enumtype.PlanetType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +15,8 @@ import java.time.LocalDate;
 public class InputSchema {
     @JsonProperty("user_id")
     private String userId;
-
     private String planet;
+
     private String gender;
     private String prefer;
     private int age;

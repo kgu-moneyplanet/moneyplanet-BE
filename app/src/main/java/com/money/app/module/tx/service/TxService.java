@@ -83,7 +83,7 @@ public class TxService {
         txRepository.save(tx);
         // type이 expensive일때 Report 생성
         if (dto.getType() == TxType.EXPENSE) {
-            Report report = Report.create(tx, dto.getAbc(),dto.getReason(),dto.getFeedback());
+            Report report = Report.create(tx, dto.getAbc(),dto.getFeedback(),dto.getFeedback());
             reportRepository.save(report);
         }
         // 일일 Stat 업뎃
@@ -237,7 +237,7 @@ public class TxService {
         if (!tx.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND); // 사용자가 소유자가 아님
         }
-        report.update(dto.getReason(), dto.getFeedback());
+        report.update(dto.getFeedback(), dto.getFeedback());
     }
 
     public DecisionResponseDto decideAbc(String userId, DecisionRequsetDto dto){

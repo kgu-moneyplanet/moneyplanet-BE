@@ -1,7 +1,7 @@
 package com.money.app.module.user.dto;
 
-import com.money.app.module.user.domain.Planet;
 import com.money.app.module.user.domain.User;
+import com.money.app.util.common.enumtype.PlanetType;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -16,13 +16,14 @@ public class UserResponseDto { //외부 응답용(프론트용), Server->Client,
     private String name;
     private String cellphone;
     private String email;
-    private Planet planet;
+    private PlanetType planet;
     private int totalIncome;
     private int totalExpense;
     private LocalDate birth;
     private String gender;
     private String job;
-    private int target;
+    private double target;
+    private boolean achieved;
     private String prefer;
 
 
