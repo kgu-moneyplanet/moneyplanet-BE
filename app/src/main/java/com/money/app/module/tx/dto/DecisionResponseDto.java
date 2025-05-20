@@ -1,4 +1,5 @@
 package com.money.app.module.tx.dto;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import com.money.app.util.common.enumtype.AbcType;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DecisionResponseDto {
+    @JsonProperty("abc")
     private AbcType abcType;
     private String feedback;
 }

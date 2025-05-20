@@ -244,10 +244,28 @@ public class TxService {
         User user = userService.getUserEntityById(userId);
         Category category = categoryService.getCategoryEntityById(dto.getCategoryId());
 
+        String genderKorean = switch (user.getGender()) {
+            case "M" -> "남성";
+            case "F" -> "여성";
+            default -> throw new IllegalArgumentException("Invalid gender");
+        };
+
+        String planetKorean = switch (user.getPlanet().name()) {
+            case "MERCURY" -> "수성";
+            case "VENUS" -> "금성";
+            case "EARTH" -> "지구";
+            case "MARS" -> "화성";
+            case "JUPITER" -> "목성";
+            case "SATURN" -> "토성";
+            case "URANUS" -> "천왕성";
+            case "NEPTUNE" -> "해왕성";
+            default -> throw new IllegalArgumentException("Invalid planet");
+        };
+
         InputSchema input = new InputSchema(
                 user.getId(),
-                user.getPlanet(),
-                user.getGender(),
+                planetKorean,
+                genderKorean,
                 user.getPrefer(),
                 LocalDate.now().getYear() - user.getBirth().getYear(),
                 user.getJob(),
@@ -260,6 +278,7 @@ public class TxService {
 
         return fastApiConnect.getAbcDecision(input);
     }
+
 }
 
 
