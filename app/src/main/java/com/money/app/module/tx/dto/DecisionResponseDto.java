@@ -16,5 +16,6 @@ import java.time.LocalDate;
 public class DecisionResponseDto {
     @JsonProperty("abc")
     private AbcType abcType;
+    private String reason;
     private String feedback;
 }
