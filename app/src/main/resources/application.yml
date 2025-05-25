@@ -1,6 +1,9 @@
+server:
+  port: ${SERVER_PORT:8080}
+
 spring:
   application:
-    name: app
+    name: spring_app
 
   datasource:
     url: ${DB_URL}

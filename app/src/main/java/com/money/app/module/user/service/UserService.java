@@ -102,7 +102,7 @@ public class UserService {
         }
 
         user.update(userUpdateDto.getName(), userUpdateDto.getCellphone(), userUpdateDto.getEmail(), userUpdateDto.getBirth(),
-                userUpdateDto.getGender(), userUpdateDto.getJob(), userUpdateDto.getPrefer());
+                userUpdateDto.getGender(), userUpdateDto.getJob(), userUpdateDto.getPrefer(), userUpdateDto.getPlanet());
 
         userRepository.save(user);
     }

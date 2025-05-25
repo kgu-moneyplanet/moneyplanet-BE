@@ -1,5 +1,6 @@
 package com.money.app.module.tx.service;
 
+import com.money.app.external.FastApiConnect;
 import com.money.app.module.category.domain.Category;
 import com.money.app.module.category.service.CategoryService;
 import com.money.app.module.stat.dailystat.service.DailyStatService;
@@ -34,10 +35,12 @@ public class TxService {
     private final DailyStatService dailyStatService;
     private final WeeklyStatService weeklyStatService;
     private final MonthlyStatService monthlyStatService;
+    private final FastApiConnect fastApiConnect;
 
     public TxService(TxRepository txRepository, ReportRepository reportRepository,
                      CategoryService categoryService, UserService userService, DailyStatService dailyStatService
-                    , WeeklyStatService weeklyStatService, MonthlyStatService monthlyStatService) {
+                    , WeeklyStatService weeklyStatService, MonthlyStatService monthlyStatService,
+                     FastApiConnect fastApiConnect) {
         this.txRepository = txRepository;
         this.reportRepository = reportRepository;
         this.categoryService = categoryService;
@@ -45,6 +48,7 @@ public class TxService {
         this.dailyStatService = dailyStatService;
         this.weeklyStatService = weeklyStatService;
         this.monthlyStatService = monthlyStatService;
+        this.fastApiConnect = fastApiConnect;
     }
     @Transactional
     public void createTxWithReport(String userId, TxCreateDto dto) {
@@ -79,7 +83,7 @@ public class TxService {
         txRepository.save(tx);
         // type이 expensive일때 Report 생성
         if (dto.getType() == TxType.EXPENSE) {
-            Report report = Report.create(tx, dto.getAbc(),dto.getReason(),dto.getFeedback());
+            Report report = Report.create(tx, dto.getAbc(),dto.getFeedback(),dto.getFeedback());
             reportRepository.save(report);
         }
         // 일일 Stat 업뎃
@@ -233,8 +237,48 @@ public class TxService {
         if (!tx.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND); // 사용자가 소유자가 아님
         }
-        report.update(dto.getReason(), dto.getFeedback());
+        report.update(dto.getFeedback(), dto.getFeedback());
     }
+
+    public DecisionResponseDto decideAbc(String userId, DecisionRequsetDto dto){
+        User user = userService.getUserEntityById(userId);
+        Category category = categoryService.getCategoryEntityById(dto.getCategoryId());
+
+        String genderKorean = switch (user.getGender()) {
+            case "M" -> "남성";
+            case "F" -> "여성";
+            default -> throw new IllegalArgumentException("Invalid gender");
+        };
+
+        String planetKorean = switch (user.getPlanet().name()) {
+            case "MERCURY" -> "수성";
+            case "VENUS" -> "금성";
+            case "EARTH" -> "지구";
+            case "MARS" -> "화성";
+            case "JUPITER" -> "목성";
+            case "SATURN" -> "토성";
+            case "URANUS" -> "천왕성";
+            case "NEPTUNE" -> "해왕성";
+            default -> throw new IllegalArgumentException("Invalid planet");
+        };
+
+        InputSchema input = new InputSchema(
+                user.getId(),
+                planetKorean,
+                genderKorean,
+                user.getPrefer(),
+                LocalDate.now().getYear() - user.getBirth().getYear(),
+                user.getJob(),
+                dto.getTxDate(),
+                dto.getAmount().intValue(),
+                category.getName(),
+                dto.getContent(),
+                dto.getMemo()
+        );
+
+        return fastApiConnect.getAbcDecision(input);
+    }
+
 }
 
 

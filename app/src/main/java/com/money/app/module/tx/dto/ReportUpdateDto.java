@@ -10,6 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReportUpdateDto {
-    private String reason;
     private String feedback;
 }

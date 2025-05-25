@@ -1,6 +1,6 @@
-package com.money.app.module.user.domain;
+package com.money.app.util.common.enumtype;
 
-public enum Planet {
+public enum PlanetType {
     MERCURY, //수성
     EARTH, //지구
     MARS, //화성
@@ -10,3 +10,4 @@ public enum Planet {
     NEPTUNE, //해왕성
     VENUS //금성
 }
+

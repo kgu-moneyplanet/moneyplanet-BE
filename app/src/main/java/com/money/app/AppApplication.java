@@ -8,6 +8,7 @@ public class AppApplication {
     public static void main(String[] args) {
         // .env 파일 로드 확인
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+        System.setProperty("SERVER_PORT", dotenv.get("SERVER_PORT"));
         System.setProperty("DB_URL", dotenv.get("DB_URL"));
         System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
         System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
