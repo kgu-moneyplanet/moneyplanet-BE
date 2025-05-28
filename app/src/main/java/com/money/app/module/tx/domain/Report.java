@@ -25,10 +25,12 @@ public class Report {
     @Enumerated(EnumType.STRING)
     private AbcType abc;  // 예: CARD, CASH 등
 
-    @Column(length = 255)
+    @Lob
+    @Column
     private String reason;
 
-    @Column(length = 255)
+    @Lob
+    @Column
     private String feedback;
 
     private LocalDateTime createDatetime;
