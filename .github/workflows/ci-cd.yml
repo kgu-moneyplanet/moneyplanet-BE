@@ -1,0 +1,41 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup JDK17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build JAR
+        run: ./gradlew build -x test
+
+      - name: Copy JAR to NCP
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "$PRIVATE_KEY" > key.pem
+          chmod 600 key.pem
+          scp -i key.pem -o StrictHostKeyChecking=no build/libs/*.jar root@223.130.142.225:/root/moneyplanet-BE/app/build/libs/
+
+      - name: Restart Docker
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          ssh -i key.pem -o StrictHostKeyChecking=no root@223.130.142.225 << 'EOF'
+            cd /root/moneyplanet-BE
+            docker compose down
+            docker-compose --env-file ./app/.env up --build -d
+          EOF
